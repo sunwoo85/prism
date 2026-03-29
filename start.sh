@@ -41,7 +41,9 @@ do_start() {
     fi
     cd "$DIR"
     [ -f "${DIR}/venv/bin/activate" ] && source "${DIR}/venv/bin/activate"
-    BACKEND_URL="$(backend "" url)" nohup python3 -m uvicorn prism:app \
+    BACKEND_URL="$(backend "" url)" \
+    BACKEND_1_LABEL="$BACKEND_1_LABEL" BACKEND_2_LABEL="$BACKEND_2_LABEL" \
+    nohup python3 -m uvicorn prism:app \
         --host 0.0.0.0 --port "$PORT" --log-level info \
         > "$LOG" 2>&1 &
     echo "Prism started  PID=$!  $(backend "" label) → $(backend "" url)  :${PORT}"
