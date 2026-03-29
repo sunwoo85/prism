@@ -48,28 +48,49 @@ Any OpenAI-compatible client. Any OpenAI-compatible backend. ~330 lines, three d
 cp prism.example.conf prism.conf
 ```
 
+Proxy settings control how prism itself runs:
+
 | Setting | Default | Purpose |
 |---------|---------|---------|
-| `BACKEND_URL` | `http://localhost:8000` | LLM backend |
+| `BACKEND_URL` | `http://localhost:8000` | LLM backend (when running `python prism.py` directly) |
 | `LISTEN_PORT` | `1319` | Proxy port |
-| `LOG_DIR` | `./logs` | Log directory |
 | `BACKEND_TIMEOUT` | `14400` | Timeout in seconds |
+| `LOG_DIR` | `./logs` | Log directory |
 
-## Multi-Backend Switching
-
-```bash
-./start.sh switch       # toggle between backends
-./start.sh switch 2     # switch to backend 2
-./start.sh status       # show current backend and model
-```
-
-Define backends in `prism.conf`:
+When using `start.sh`, backend settings define where prism forwards traffic. Configure two backends and switch between them on the fly:
 
 ```bash
 BACKEND_1_URL="http://localhost:8000"
 BACKEND_1_LABEL="Backend 1"
 BACKEND_2_URL="http://localhost:8080"
 BACKEND_2_LABEL="Backend 2"
+```
+
+## Multi-Backend Switching
+
+```bash
+./start.sh switch       # toggle between backends
+./start.sh status       # show current backend and model
+```
+
+**Tip:** Set up an alias for convenience:
+
+```bash
+echo 'alias prism="~/prism/start.sh"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+Then:
+
+```bash
+prism                   # start (default)
+prism status            # show state, backend, model, health
+prism switch            # toggle between backends
+prism restart           # restart
+prism stop              # stop
+prism logs              # tail log file
+prism 1                 # start with backend 1
+prism 2                 # start with backend 2
 ```
 
 ## Logging
@@ -86,6 +107,7 @@ Every request is saved as a JSON file under `logs/YYYY-MM-DD/`. Each log contain
 
 | Version | Date | Description |
 |---------|------|-------------|
+| 0.1.1 | 2026-03-29 | Improved docs — configuration clarity, alias tip, full command reference |
 | 0.1.0 | 2026-03-29 | Initial release — transparent proxy, full logging, multi-backend switching |
 
 ## License
