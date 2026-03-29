@@ -1,0 +1,6 @@
+logs/
+.backend
+__pycache__/
+venv/
+prism.conf
+prism.log
